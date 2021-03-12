@@ -18,7 +18,7 @@ RUN apk update --no-cache && \
         -s /bin/false \
         -c "User for Graphite daemon" \
         carbon && \
-    mkdir \
+    mkdir -p \
         /var/spool/carbon-relay-ng && \
     chown -R carbon:carbon /var/spool/carbon-relay-ng && \
     rm -rf \
