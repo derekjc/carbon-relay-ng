@@ -24,10 +24,10 @@ RUN apk update --no-cache && \
     rm -rf \
         /tmp/* \
         /var/cache/apk/*
-COPY carbon-relay-ng.conf /etc/carbon-relay-ng/
+COPY carbon-relay-ng.ini /etc/carbon-relay-ng/
 COPY entrypoint.sh   /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
 
-EXPOSE 2003 2004 2013 8081
+EXPOSE 2003 8081
 
 ENTRYPOINT ["/entrypoint.sh"]
