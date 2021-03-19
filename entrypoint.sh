@@ -13,4 +13,4 @@ fi
 
 sed -i "s/CARBON_DEST1/$CARBON_DEST1/;s/CARBON_DEST2/$CARBON_DEST2/" /etc/carbon-relay-ng/carbon-relay-ng.ini
 
-su-exec carbon /bin/carbon-relay-ng /etc/carbon-relay-ng/carbon-relay-ng.ini
+su-exec carbon /usr/bin/carbon-relay-ng /etc/carbon-relay-ng/carbon-relay-ng.ini

@@ -1,6 +1,36 @@
-FROM raintank/carbon-relay-ng:0.13.0
+FROM golang:1.15-alpine as builder
+
+ENV CRNG_VERSION=v0.13.0
+ENV GOPATH=/opt/go
+
+RUN \
+  apk update  --no-cache && \
+  apk upgrade --no-cache && \
+  apk add g++ git make musl-dev cairo-dev
+
+WORKDIR ${GOPATH}
+
+RUN \
+  export PATH="${PATH}:${GOPATH}/bin" && \
+  git clone https://github.com/grafana/carbon-relay-ng.git
+
+WORKDIR ${GOPATH}/carbon-relay-ng
+
+RUN \
+  export PATH="${PATH}:${GOPATH}/bin" && \
+  go get github.com/shuLhan/go-bindata/cmd/go-bindata && \
+  git checkout "tags/${CRNG_VERSION}" 2> /dev/null ; \
+  version=${CRNG_VERSION} && \
+  echo "build version: ${version}" && \
+  make && \
+  mv carbon-relay-ng /tmp/carbon-relay-ng
+
+# ------------------------------ RUN IMAGE --------------------------------------
+FROM alpine:3.13.2
 
 LABEL org.opencontainers.image.source https://github.com/derekjc/carbon-relay-ng
+
+COPY --from=builder /tmp/carbon-relay-ng /usr/bin/carbon-relay-ng
 
 RUN apk update --no-cache && \
     apk upgrade --no-cache && \
